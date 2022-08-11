@@ -76,5 +76,12 @@ Tree도 Graph에 포함된다.
 2. 구현이 비교적 어렵다.
 
 ## 그래프의 탐색
-![image](https://user-images.githubusercontent.com/54929520/184069043-a5a9152f-088b-4cd5-9e42-a8e44ebf827b.png)
+<img src="https://blog.kakaocdn.net/dn/cFgEJ6/btqKmoJkq5a/pwm3O8T4rERuL4wSTrkgnK/img.gif">
 
+#### 깊이 우선탐색(BFS)
+깊이 우선탐색 DFS는 갈 수 있는 만큼 최대한 깊이 가고, 더 이상 갈 곳이 없다면 이전 정점으로 돌아가는 방식으로 그래프를 순회하는 방식이다.   
+간단히 재귀호출을 사용하여 구현하거나 스택을 사용하여 구현한다. 
+
+#### 넓이 우선탐색(BFS)
+넓이 우선탐색 BFS는 시작정점을 방문한 후 시작 정점에 인접한 모든 정점을 방문한 후 시작 정점에 인접한 모든 정점들을 우선방문하는 방법한다. 
+일반적으로 QUEUE를 사용해서 지금 위치에서 갈 수 있는 것들을 모두 큐에 넣는 방식으로 구현한다.  
