@@ -39,7 +39,19 @@
 마지막 레벨은 꽉 차있지 않아도 되지만 노드가 왼쪽에서부터 채워진다.
 
 #### 이진 탐색 트리
-탐색을 위한 이진 트리 기반의 자료구조이다.
-left node에는 **부모노드보다 작은 값**이 저장된다.
-right node에는 **부모노드와 값이 같거나 큰 값**이 저장된다.
-모든 노드는 **중복된 값을 가지지 않는다**.
+탐색을 위한 이진 트리 기반의 자료구조이다.  
+left node에는 **부모노드보다 작은 값**이 저장된다.  
+right node에는 **부모노드와 값이 같거나 큰 값**이 저장된다.  
+모든 노드는 **중복된 값을 가지지 않는다**.  
+
+#### **이진 탐색 트리 생성**
+<img src="https://blog.penjee.com/wp-content/uploads/2015/11/binary-search-tree-insertion-animation.gif">
+
+#### **이진 탐색 트리 탐색**
+<img src="https://blog.penjee.com/wp-content/uploads/2015/11/binary-search-tree-sorted-array-animation.gif">
+
+이진 탐색 트리의 시간복잡도는 **O(log N)** 이다. **배열보다 탐색에 훨씬 효율적**이므로 시간 복잡도를 줄이는데 효율적이다.
+
+## 그래프와 트리의 차이
+![image](https://user-images.githubusercontent.com/54929520/184082545-96594941-2388-430a-9183-0243290e2b65.png)
+
