@@ -46,10 +46,51 @@ NIL이 아닌 모든 나머지노드.
 
 ## 삭제
 1. 간단하게 해결할 수 있는 경우
-![image](https://user-images.githubusercontent.com/54929520/184870819-c40c7f93-2a8b-47ff-9ad4-b5c8cec5fab4.png)
+![image](https://user-images.githubusercontent.com/54929520/184870819-c40c7f93-2a8b-47ff-9ad4-b5c8cec5fab4.png)  
 - **m이 레드인 경우** 그냥 삭제한다.
 - **m이 블랙이고 자식이 레드**이면 삭제 후 자식을 블랙으로 바꾸면 된다.
 
-2. 까다로운경우는 **m과 x가 블랙**인경우이다. 이 경우 m을 삭제하면 5번조건(모든 리프노드의 black depth는 같다)을 위한한다.
-![image](https://user-images.githubusercontent.com/54929520/184871109-15b400d0-5520-404d-9031-b1e084605fab.png)
+2. 까다로운경우는 **m과 x가 블랙**인경우이다. 이 경우 m을 삭제하면 **5번조건(모든 리프노드의 black depth는 같다)** 을 위반한다.  
 
+![image](https://user-images.githubusercontent.com/54929520/184871109-15b400d0-5520-404d-9031-b1e084605fab.png)  
+
+**Case 1 : p가 레드 (s는 항상 블랙이므로) <l, r의 색상>에 따라**  
+- Case 1-1 <블랙, 블랙>
+- Case 1-2 <*, 레드>
+- Case 1-3 <레드, 블랙>
+
+
+**Case 2 : p가 블랙 <s, l, r의 색상>에 따라-**
+- Case 2-1 <블랙, 블랙, 블랙>
+- Case 2-2 <블랙, *, 레드>
+- Case 2-3 <블렉, 레드, 블랙>
+- Case 2-4 <레드, 블랙, 블랙>
+
+#### case 1-1
+![image](https://user-images.githubusercontent.com/54929520/184872206-fb3e8ad5-fd29-4e93-8830-622002841515.png)  
+단순히 p와 s의 색상을 맞바꾼다.
+
+#### case *-2
+![image](https://user-images.githubusercontent.com/54929520/184872699-3fd980dc-074c-4915-ae6a-3b461f60b9c3.png)  
+p를 중심으로 좌회전 후, p와 s의 색상을 바꾼 후 r의 색상을 레드에서 블랙으로 바꾼다.
+
+#### case *-3
+![image](https://user-images.githubusercontent.com/54929520/184872785-6f279fcc-9a60-4c0a-bca1-928f358fb79e.png)  
+s를 중심으로 우회전 후 l과 s의 색상을 바꾸고 case *-2로 이동.
+
+#### case 2-1
+![image](https://user-images.githubusercontent.com/54929520/184872856-3b16ddd4-a799-434b-9858-d09fad78e85a.png)  
+s를 레드에서 블랙으로 바꾸면 p의 트리 전체가 블랙노드가 하나 모자라게된다. 이 후에 루트노드까지 이동하며 재귀적으로 문제를 해결한다.
+
+#### case 2-4
+![image](https://user-images.githubusercontent.com/54929520/184873162-8136e857-024b-4fde-b681-b2d67b99f4e2.png)  
+p를 중심으로 좌회전 후 p와 s의 색상을 바꾼다. 이후 Case 1의 상황이 발생하므로 조건에 맞는 케이스를 해결한다.  
+
+# RedBlack Tree VS AVL Tree
+#### 1) 레드-블랙 트리
+- 삽입, 삭제 시 균형을 맞추기 위한 작업 횟수가 적다.
+- 각 노드당 색깔을 표현하는데 1bit만 필요하다.
+#### 2) AVL 트리
+- 조회 시 더 빠른 성능
+- 노드에 색깔이 없다.
+- Balance Factor나 height를 저장하기 위해 integer값을 하나 더 저장해야한다.
