@@ -51,3 +51,11 @@ B-트리는 다음과 같은 특징을 갖는다.
 ![image](https://user-images.githubusercontent.com/54929520/184882155-ebac63de-dcf0-45f9-a1b6-a0e58478fa92.png)
 (해당 그림에서 10노드는 17이다. 오타임)
 ![image](https://user-images.githubusercontent.com/54929520/184882848-23398ba8-c1a6-439e-8527-d8e78361e0f6.png)
+
+# B+ 트리
+![image](https://user-images.githubusercontent.com/54929520/186080621-0446772d-2370-4c87-af0d-dff99e86a13d.png)
+
+B-트리는 탐색을 위해 노드를 찾아 이동해야한다. 하지만 B+ 트리는 같은 레벨의 모든 키값들이 정렬되어잇고, 같은 레벨의 sibling node는 연결리스트 형태로 이어져있다.  
+Inner Node에는 key(포인터)만 저장되고 실제 모든 데이터들은 leaf node에 존재하고 그 자료들이 연결리스트로 연결되어있다.  
+따라서 Leaf Node의 부모 노드에는 리프노드의 키가 일부 중복되어 저장되는 특징을 갖는다.  
+B+트리의 이너노드는 데이터가 존재하지 않기 때문에 B-트리에 비해 용량이 작다. 하나의 Disk Block에 더 많은 이너노드를 배치할 수 있으므로 B-트리보다 적은 디스크블락을 읽어도 된다. 이러한 이점으로 B+트리가 B-트리보다 좀 더 나은 성능을 보여준다.  
