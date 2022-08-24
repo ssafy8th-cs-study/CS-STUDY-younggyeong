@@ -76,6 +76,29 @@ EX) TIME_WAIT이 없을 경우
 - TCP 통신이 제대로 끊기지 않음
 
 ## TCP 헤더 구성
+![image](https://user-images.githubusercontent.com/54929520/186448509-18f8ff06-918b-465d-b217-4d8f8860eee1.png)
+|구분|내용|
+|---|---|
+|Source Port|송신측 포트번호|
+|Destination Port|수신측 포트번호|
+|Sequence Number|SYN Flag=1인 경우, 초기 순서 번호를 나타낸다. SYN Flag=0인 경우, 세그먼트의 순서번호.  네트워크가 불안하여 패킷을 분실, 지연 등으로 세그먼트가 순서가 어긋나게 도착 할 수 있기 때문에 sequence number를 이용하여 데이터를 올바른 순서로 재배열할 수 있다.|
+|ACK Number|수신자에 의해 예상되는 다음 바이트의 순서번호(TCP통신 시 누적). 모든 데이터가 수신되었다는 것을 나타내는 묵시적인 확인 메시지 역할을 한다.|
+|Offset|TCP Header의 32bit 워드 번호(TCP 헤더의 시작부터 데이터 이전까지의 길이). 헤드의 길이를 32비트 단위로 나타낸다. 최소 필드 값은 5 (5 * 32 = 160bit or 20Byte ), 최대 값 15 (15 * 32 = 480bit or 60byte).|
+|Flag(Code)|URG, ACK, PSH, PST, SYN, FIN|
+|Window Size|수신측이 받을 수 있는 데이터 사이즈를 수신측에서 송신측으로 전송하는 값|
+|Check Sum|TCP Header를 포함한 세그먼트 전체에 대하여 계산한 값(에러체크). TCP 세그먼트의 내용이 유효한지 검증하고 손상 여부를 검사 할 수 있다.|
+|Urgent Pointer|긴급히 처리해야 할 필요가 있는 데이터의 마지막 바이트의 위치|
+|Option|연결이 구성되는 동안 협상할 최대 Segment 크기(MSS) 옵션을 정의|
+
+#### Flags 필드
+- CWR(Congestion Window Reduced) : 혼잡 윈도우 크기 감소
+- ECN(Explicit Congestion Notification) : 혼잡을 알림
+- URG(Urgent) : Urgent Pointer 필드가 가리키는 세그먼트 번호까지 긴급 데이터를 포함되어 있다는 것을 뜻한다.  이 플래그가 설정되지 않았다면 Uregent Pointer 필드는 무시되어야 한다
+- ACK(Acknowledgment) : 확인 응답 메시지
+- PSH(Push) : 데이터를 포함한다는 것을 뜻한다.
+- RST(Reset) : 수신 거부를 하고자 할때 사용
+- SYN(Synchronize) : 가상 회선이 처음 개설될 때 두 시스템의 TCP 소프트웨어는 의미 있는 확인 메시지를 전송하기 위해 일련번호를 서로 동기화해야 한다.
+- FIN(Finish) : 작업이 끝나고 가상 회선을 종결하고자 할 때 사용
 
 
 # UDP
@@ -107,7 +130,28 @@ UDP는 **비연결형 프로토콜**이다. 즉 할당되는 논리적 경로가
 |흐름제어|데이터를 송신하는 곳과 수신하는 곳의 데이터 처리속도를 조절하여 수신자의 버퍼 오버플로우를 방지하는 것.|
 |혼잡제어|네트워크 내의 패킷 수가 넘치게 증가하지 않도록 방지하는 것.|
 
+## UDP 헤더
+![image](https://user-images.githubusercontent.com/54929520/186451354-c842dbdd-e604-46b3-9efa-a0eaf257c3cf.png)
+|구분|의미|
+|--|--|
+|Length|UDP Packet의 옥텟 단위 길이, UDP Header+Data|
+|CheckSum|세그먼트 저체에 대한 계산값 -> 오류검출|
+
 ## TCP와 UDP의 차이
 ![image](https://user-images.githubusercontent.com/54929520/186442891-db336eb6-8c1f-40c8-83fe-e09d79f5eeac.png)
 
 ## 예상 질문
+### TCP 관련 질문 1  
+Q. TCP의 연결 설정 과정(3단계)과 연결 종료 과정(4단계)이 단계가 차이나는 이유?  
+
+A. Client가 데이터 전송을 마쳤다고 하더라도 Server는 아직 보낼 데이터가 남아있을 수 있기 때문에 일단 FIN에 대한 ACK만 보내고, 데이터를 모두 전송한 후에 자신도 FIN 메시지를 보내기 때문이다.  
+
+### TCP 관련 질문 2  
+Q. 만약 Server에서 FIN 플래그를 전송하기 전에 전송한 패킷이 Routing 지연이나 패킷 유실로 인한 재전송 등으로 인해 FIN 패킷보다 늦게 도착하는 상황이 발생하면 어떻게 될까?  
+
+A. 이러한 현상에 대비하여 Client는 Server로부터 FIN 플래그를 수신하더라도 일정시간(Default: 240sec)동안 세션을 남겨 놓고 잉여 패킷을 기다리는 과정을 거친다. (TIME_WAIT 과정)  
+
+### TCP 관련 질문 3  
+Q. 초기 Sequence Number인 ISN을 0부터 시작하지 않고 난수를 생성해서 설정하는 이유?  
+
+A. Connection을 맺을 때 사용하는 포트(Port)는 유한 범위 내에서 사용하고 시간이 지남에 따라 재사용된다. 따라서 두 통신 호스트가 과거에 사용된 포트 번호 쌍을 사용하는 가능성이 존재한다. 서버 측에서는 패킷의 SYN을 보고 패킷을 구분하게 되는데 난수가 아닌 순처적인 Number가 전송된다면 이전의 Connection으로부터 오는 패킷으로 인식할 수 있다. 이런 문제가 발생할 가능성을 줄이기 위해서 난수로 ISN을 설정한다. 
